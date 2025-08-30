@@ -28,6 +28,10 @@
   "author": {
     "name": "Kjetil Volden"
   },
+  "source": "https://github.com/kvolden/no.renovasjon",
+  "bugs": {
+    "url": "https://github.com/kvolden/no.renovasjon/issues"
+  },
   "flow": {
     "conditions": [
       {
