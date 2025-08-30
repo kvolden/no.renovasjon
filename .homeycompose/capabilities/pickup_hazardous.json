@@ -1,0 +1,12 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Hazardous waste",
+        "no": "Farlig avfall"
+    },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "insights": false,
+    "icon": "/drivers/tommeplan/assets/hazardous.svg"
+}

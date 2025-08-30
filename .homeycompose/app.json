@@ -1,0 +1,30 @@
+{
+  "id": "no.renovasjon",
+  "version": "0.0.1",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "brandColor": "#1CA68D",
+  "name": {
+    "en": "Renovasjon",
+    "no": "Renovasjon"
+  },
+  "description": {
+    "en": "Fetches waste management schedules (Norway only).",
+    "no": "Henter tømmeplaner for renovasjon."
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Kjetil Volden"
+  }
+}

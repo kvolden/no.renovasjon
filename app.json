@@ -1,0 +1,470 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "no.renovasjon",
+  "version": "0.0.1",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "brandColor": "#1CA68D",
+  "name": {
+    "en": "Renovasjon",
+    "no": "Renovasjon"
+  },
+  "description": {
+    "en": "Fetches waste management schedules (Norway only).",
+    "no": "Henter tømmeplaner for renovasjon."
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Kjetil Volden"
+  },
+  "flow": {
+    "conditions": [
+      {
+        "id": "garbage-is-collected",
+        "title": {
+          "en": "Garbage !{{is|is not}} collected",
+          "no": "Avfall !{{hentes|hentes ikke}}"
+        },
+        "titleFormatted": {
+          "en": "Next garbage collection !{{is|is not}} in [[days]] days",
+          "no": "Neste henting av avfall !{{er|er ikke}} om [[days]] dager"
+        },
+        "hint": {
+          "en": "Next garbage collection in N days (0 means same day)",
+          "no": "Neste henting av avfall om N dager (0 betyr samme dag)"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tommeplan"
+          },
+          {
+            "type": "number",
+            "name": "days",
+            "placeholder": {
+              "en": "Number",
+              "no": "Antall"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      },
+      {
+        "id": "fraction-is-collected",
+        "title": {
+          "en": "Garbage type !{{is|is not}} collected",
+          "no": "Avfallstype !{{hentes|hentes ikke}}"
+        },
+        "titleFormatted": {
+          "en": "Next collection of [[fraction]] !{{is|is not}} in [[days]] days",
+          "no": "Neste henting av [[fraction]] !{{er|er ikke}} om [[days]] dager"
+        },
+        "hint": {
+          "en": "Next collection of garbage type in N days (0 means same day)",
+          "no": "Neste henting av avfallstype om N dager (0 betyr samme dag)"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=tommeplan"
+          },
+          {
+            "type": "dropdown",
+            "name": "fraction",
+            "title": {
+              "en": "Garbage type",
+              "no": "Avfallstype"
+            },
+            "values": [
+              {
+                "id": "general",
+                "label": {
+                  "en": "Residual waste",
+                  "no": "Restavfall"
+                }
+              },
+              {
+                "id": "food",
+                "label": {
+                  "en": "Food waste",
+                  "no": "Matavfall"
+                }
+              },
+              {
+                "id": "paper",
+                "label": {
+                  "en": "Paper/Cardboard",
+                  "no": "Papir/Papp"
+                }
+              },
+              {
+                "id": "plastic",
+                "label": {
+                  "en": "Plastic",
+                  "no": "Plast"
+                }
+              },
+              {
+                "id": "glass",
+                "label": {
+                  "en": "Glass/Metal",
+                  "no": "Glass/Metall"
+                }
+              },
+              {
+                "id": "hazardous",
+                "label": {
+                  "en": "Hazardous waste",
+                  "no": "Farlig avfall"
+                }
+              }
+            ]
+          },
+          {
+            "type": "number",
+            "name": "days",
+            "placeholder": {
+              "en": "Number",
+              "no": "Antall"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Pickup schedule",
+        "no": "Tømmeplan"
+      },
+      "class": "service",
+      "capabilities": [
+        "pickup_glass",
+        "pickup_food",
+        "pickup_paper",
+        "pickup_plastic",
+        "pickup_general",
+        "pickup_hazardous",
+        "pickup_garden",
+        "pickup_next_fractions",
+        "pickup_next"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/tommeplan/assets/images/small.png",
+        "large": "/drivers/tommeplan/assets/images/large.png",
+        "xlarge": "/drivers/tommeplan/assets/images/xlarge.png"
+      },
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Address",
+            "no": "Adresse"
+          },
+          "children": [
+            {
+              "id": "streetAddress",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Street address",
+                "no": "Gateadresse"
+              }
+            },
+            {
+              "id": "municipality",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Municipality",
+                "no": "Kommune"
+              }
+            },
+            {
+              "id": "provider",
+              "type": "label",
+              "value": "",
+              "label": {
+                "en": "Waste service",
+                "no": "Avfallstjeneste"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Time settings",
+            "no": "Tidsinnstillinger"
+          },
+          "children": [
+            {
+              "id": "relative_time",
+              "type": "dropdown",
+              "label": {
+                "en": "Show pickup times as relative",
+                "no": "Vis relative hentetider"
+              },
+              "value": "false",
+              "values": [
+                {
+                  "id": "false",
+                  "label": {
+                    "en": "No",
+                    "no": "Nei"
+                  }
+                },
+                {
+                  "id": "true",
+                  "label": {
+                    "en": "Yes",
+                    "no": "Ja"
+                  }
+                },
+                {
+                  "id": "only_next",
+                  "label": {
+                    "en": "Only for Next pickup",
+                    "no": "Bare for Neste henting"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "show_next_fractions",
+              "type": "checkbox",
+              "label": {
+                "en": "Show types in Next pickup",
+                "no": "Vis typer i Neste henting"
+              },
+              "value": false
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Show waste types",
+            "no": "Vis avfallstyper"
+          },
+          "children": [
+            {
+              "id": "show_fraction_general",
+              "type": "checkbox",
+              "label": {
+                "en": "Show Residual waste",
+                "no": "Vis Restavfall"
+              },
+              "value": true
+            },
+            {
+              "id": "show_fraction_food",
+              "type": "checkbox",
+              "label": {
+                "en": "Show Food waste",
+                "no": "Vis Matavfall"
+              },
+              "value": true
+            },
+            {
+              "id": "show_fraction_paper",
+              "type": "checkbox",
+              "label": {
+                "en": "Show Paper/Cardboard",
+                "no": "Vis Papir/Papp"
+              },
+              "value": true
+            },
+            {
+              "id": "show_fraction_plastic",
+              "type": "checkbox",
+              "label": {
+                "en": "Show Plastic",
+                "no": "Vis Plast"
+              },
+              "value": true
+            },
+            {
+              "id": "show_fraction_glass",
+              "type": "checkbox",
+              "label": {
+                "en": "Show Glass/Metal",
+                "no": "Vis Glass/Metall"
+              },
+              "value": true
+            },
+            {
+              "id": "show_fraction_hazardous",
+              "type": "checkbox",
+              "label": {
+                "en": "Show Hazardous waste",
+                "no": "Vis Farlig avfall"
+              },
+              "value": true
+            },
+            {
+              "id": "show_fraction_garden",
+              "type": "checkbox",
+              "label": {
+                "en": "Show Garden waste",
+                "no": "Vis Hageavfall"
+              },
+              "value": true
+            }
+          ]
+        }
+      ],
+      "pair": [
+        {
+          "id": "enter_details"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "tommeplan"
+    }
+  ],
+  "capabilities": {
+    "pickup_food": {
+      "type": "string",
+      "title": {
+        "en": "Food",
+        "no": "Matavfall"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "icon": "/drivers/tommeplan/assets/food.svg"
+    },
+    "pickup_garden": {
+      "type": "string",
+      "title": {
+        "en": "Garden waste",
+        "no": "Hageavfall"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "icon": "/drivers/tommeplan/assets/garden.svg"
+    },
+    "pickup_general": {
+      "type": "string",
+      "title": {
+        "en": "General waste",
+        "no": "Restavfall"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "icon": "/drivers/tommeplan/assets/general.svg"
+    },
+    "pickup_glass": {
+      "type": "string",
+      "title": {
+        "en": "Glass/Metal",
+        "no": "Glass/Metall"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "icon": "/drivers/tommeplan/assets/glass.svg"
+    },
+    "pickup_hazardous": {
+      "type": "string",
+      "title": {
+        "en": "Hazardous waste",
+        "no": "Farlig avfall"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "icon": "/drivers/tommeplan/assets/hazardous.svg"
+    },
+    "pickup_next": {
+      "type": "string",
+      "title": {
+        "en": "Next pickup",
+        "no": "Neste henting"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "icon": "/drivers/tommeplan/assets/next.svg"
+    },
+    "pickup_next_fractions": {
+      "type": "string",
+      "title": {
+        "en": "Next pickup types",
+        "no": "Neste henting typer"
+      },
+      "uiComponent": null,
+      "getable": true,
+      "setable": false,
+      "insights": false
+    },
+    "pickup_paper": {
+      "type": "string",
+      "title": {
+        "en": "Paper/Cardboard",
+        "no": "Papir/Papp"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "icon": "/drivers/tommeplan/assets/paper.svg"
+    },
+    "pickup_plastic": {
+      "type": "string",
+      "title": {
+        "en": "Plastic",
+        "no": "Plast"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false,
+      "icon": "/drivers/tommeplan/assets/plastic.svg"
+    }
+  }
+}

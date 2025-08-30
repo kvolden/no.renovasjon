@@ -1,0 +1,12 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Garden waste",
+        "no": "Hageavfall"
+    },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "insights": false,
+    "icon": "/drivers/tommeplan/assets/garden.svg"
+}

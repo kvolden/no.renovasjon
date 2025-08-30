@@ -1,0 +1,12 @@
+{
+    "type": "string",
+    "title": {
+        "en": "General waste",
+        "no": "Restavfall"
+    },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "insights": false,
+    "icon": "/drivers/tommeplan/assets/general.svg"
+}

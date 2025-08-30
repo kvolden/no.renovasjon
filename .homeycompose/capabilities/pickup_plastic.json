@@ -1,0 +1,12 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Plastic",
+        "no": "Plast"
+    },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "insights": false,
+    "icon": "/drivers/tommeplan/assets/plastic.svg"
+}

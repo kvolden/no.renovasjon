@@ -1,0 +1,12 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Food",
+        "no": "Matavfall"
+    },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "insights": false,
+    "icon": "/drivers/tommeplan/assets/food.svg"
+}

@@ -1,0 +1,12 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Glass/Metal",
+        "no": "Glass/Metall"
+    },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "insights": false,
+    "icon": "/drivers/tommeplan/assets/glass.svg"
+}

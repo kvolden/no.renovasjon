@@ -1,0 +1,12 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Next pickup",
+        "no": "Neste henting"
+    },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "insights": false,
+    "icon": "/drivers/tommeplan/assets/next.svg"
+}

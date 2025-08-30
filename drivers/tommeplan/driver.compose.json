@@ -1,0 +1,152 @@
+{
+  "name": {
+    "en": "Pickup schedule",
+    "no": "Tømmeplan"
+  },
+  "class": "service",
+  "capabilities": [
+    "pickup_glass",
+    "pickup_food",
+    "pickup_paper",
+    "pickup_plastic",
+    "pickup_general",
+    "pickup_hazardous",
+    "pickup_garden",
+    "pickup_next_fractions",
+    "pickup_next"
+  ],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "cloud"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "settings": [
+    {
+      "type": "group",
+      "label": { "en": "Address", "no": "Adresse" },
+      "children": [
+        {
+          "id": "streetAddress",
+          "type": "label",
+          "value": "",
+          "label": { "en": "Street address", "no": "Gateadresse" }
+        },
+        {
+          "id": "municipality",
+          "type": "label",
+          "value": "",
+          "label": { "en": "Municipality", "no": "Kommune" }
+        },
+        {
+          "id": "provider",
+          "type": "label",
+          "value": "",
+          "label": { "en": "Waste service", "no": "Avfallstjeneste" }
+        }
+
+      ]
+    },
+    {
+      "type": "group",
+      "label": { "en": "Time settings", "no": "Tidsinnstillinger" },
+      "children": [
+        {
+          "id": "relative_time",
+          "type": "dropdown",
+          "label": { "en": "Show pickup times as relative", "no": "Vis relative hentetider" },
+          "value": "false",
+          "values": [
+            {
+              "id": "false",
+              "label": { "en": "No", "no": "Nei" }
+            },
+            {
+              "id": "true",
+              "label": { "en": "Yes", "no": "Ja" }
+            },
+            {
+              "id": "only_next",
+              "label": { "en": "Only for Next pickup", "no": "Bare for Neste henting" }
+            }
+          ]
+        },
+        {
+          "id": "show_next_fractions",
+          "type": "checkbox",
+          "label": { "en": "Show types in Next pickup", "no": "Vis typer i Neste henting" },
+          "value": false
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": { "en": "Show waste types", "no": "Vis avfallstyper" },
+      "children": [
+        {
+          "id": "show_fraction_general",
+          "type": "checkbox",
+          "label": { "en": "Show Residual waste", "no": "Vis Restavfall" },
+          "value": true
+        },
+        {
+          "id": "show_fraction_food",
+          "type": "checkbox",
+          "label": { "en": "Show Food waste", "no": "Vis Matavfall" },
+          "value": true
+        },
+        {
+          "id": "show_fraction_paper",
+          "type": "checkbox",
+          "label": { "en": "Show Paper/Cardboard", "no": "Vis Papir/Papp" },
+          "value": true
+        },
+        {
+          "id": "show_fraction_plastic",
+          "type": "checkbox",
+          "label": { "en": "Show Plastic", "no": "Vis Plast" },
+          "value": true
+        },
+        {
+          "id": "show_fraction_glass",
+          "type": "checkbox",
+          "label": { "en": "Show Glass/Metal", "no": "Vis Glass/Metall" },
+          "value": true
+        },
+        {
+          "id": "show_fraction_hazardous",
+          "type": "checkbox",
+          "label": { "en": "Show Hazardous waste", "no": "Vis Farlig avfall" },
+          "value": true
+        },
+        {
+          "id": "show_fraction_garden",
+          "type": "checkbox",
+          "label": { "en": "Show Garden waste", "no": "Vis Hageavfall" },
+          "value": true
+        }
+      ]
+    }
+  ],
+  "pair": [
+    {
+      "id": "enter_details"
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}

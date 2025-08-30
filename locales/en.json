@@ -1,0 +1,50 @@
+{
+  "pair": {
+    "title": "Configuration",
+    "enter-details": "Enter details",
+    "address": "Address:",
+    "next": "Next"
+  },
+  "fractions": {
+    "general": {
+      "short": "General",
+      "medium": "General waste",
+      "long": "General waste"
+    },
+    "food": {
+      "short": "Food",
+      "medium": "Food waste",
+      "long": "Food waste"
+    },
+    "paper": {
+      "short": "Paper",
+      "medium": "Paper/Cardboard",
+      "long": "Paper and cardboard"
+    },
+    "plastic": {
+      "short": "Plastic",
+      "medium": "Plastic",
+      "long": "Plastic packaging"
+    },
+    "glass": {
+      "short": "Glass",
+      "medium": "Glass/Metal",
+      "long": "Glass and metal packaging"
+    },
+    "hazardous": {
+      "short": "Hazardous",
+      "medium": "Hazardous waste",
+      "long": "Hazardous waste"
+    },
+    "garden": {
+      "short": "Garden",
+      "medium": "Garden waste",
+      "long": "Garden waste"
+    }
+  },
+  "grammar": {
+    "day": "day",
+    "days": "days",
+    "until": "until"
+  }
+}

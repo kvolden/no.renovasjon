@@ -1,0 +1,50 @@
+{
+    "pair": {
+        "title": "Konfigurasjon",
+        "enter-details": "Oppgi detaljer",
+        "address": "Adresse:",
+        "next": "Neste"
+  },
+  "fractions": {
+    "general": {
+        "short": "Rest",
+        "medium": "Restavfall",
+        "long": "Restavfall"
+    },
+    "food": {
+        "short": "Mat",
+        "medium": "Matavfall",
+        "long": "Matavfall"
+    },
+    "paper": {
+        "short": "Papir",
+        "medium": "Papir/Papp",
+        "long": "Papir og papp"
+    },
+    "plastic": {
+        "short": "Plast",
+        "medium": "Plast",
+        "long": "Plastemballasje"
+    },
+    "glass": {
+        "short": "Glass",
+        "medium": "Glass/Metall",
+        "long": "Glass- og metallemballasje"
+    },
+    "hazardous": {
+        "short": "Farlig",
+        "medium": "Farlig avfall",
+        "long": "Farlig avfall"
+    },
+    "garden": {
+        "short": "Hage",
+        "medium": "Hageavfall",
+        "long": "Hageavfall"
+    }
+  },
+  "grammar": {
+    "day": "dag",
+    "days": "dager",
+    "until": "til"
+  }
+}
