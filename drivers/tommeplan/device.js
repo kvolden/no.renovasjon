@@ -13,6 +13,7 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     // Update data if the device exists. If not it will be updated in onAdded() after setup.
     if (this.getStoreValue("deviceAdded")) {
       await this.updateData();
+      await this.updateCapabilities();
     }
   }
 
@@ -23,8 +24,13 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     this.log('RenovasjonDevice has been added');
     const addressData = this.getStoreValue('addressData');
     const addressUUID = this.getStoreValue('addressUUID');
-    // Set default settings based on what the provider supports
-    const supportedFractions = await this.adapter.getSupportedFractions(addressData, addressUUID);
+    await this.updateData();
+
+    // Set default settings based on supported fractions
+    const supportedFractions = {};
+    for (const key in this.fractionDates) {
+      supportedFractions[key] = !!this.fractionDates[key];
+    }
     await this.setSettings({
       show_fraction_glass: supportedFractions.glass || false,
       show_fraction_food: supportedFractions.food || false,
@@ -35,8 +41,8 @@ module.exports = class RenovasjonDevice extends Homey.Device {
       show_fraction_garden: supportedFractions.garden || false,
     });
     await this.showAndHideCapabilities();
-    await this.updateData();
-    // Mark as added so we know it's safe to rerun data update in onInit()
+    await this.updateCapabilities();
+    // Mark as added so we know it's safe to rerun capability update in onInit()
     this.setStoreValue("deviceAdded", true);
   }
 
@@ -122,7 +128,7 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     }
   }
 
-  getNextDisposals(fractions) {
+  getNextPickup(fractions) {
     // Filter out null values
     const entries = Object.entries(fractions).filter(([, date]) => date);
     if (entries.length === 0) {
@@ -144,17 +150,17 @@ module.exports = class RenovasjonDevice extends Homey.Device {
 
   async updateCapability(cap, settings = this.getSettings()) {
     if (cap == "pickup_next_fractions") {
-      const translatedNextFractions = this.nextDisposals.fractions.map(key => this.homey.__(`fractions.${key}.medium`));
+      const translatedNextFractions = this.nextPickup.fractions.map(key => this.homey.__(`fractions.${key}.medium`));
       await this.setCapabilityValue(cap, translatedNextFractions.join(', '));
     }
     else if (cap == "pickup_next") {
       const relativeTime = settings.relative_time == "true" || settings.relative_time == "only_next";
-      let str = this.formatDate(this.nextDisposals.date, relativeTime);
+      let str = this.formatDate(this.nextPickup.date, relativeTime);
       if (relativeTime && settings.show_next_fractions) {
         str += ` ${this.homey.__('grammar.until')}`;
       }
       if (settings.show_next_fractions) {
-        const translatedNextFractions = this.nextDisposals.fractions.map(key => this.homey.__(`fractions.${key}.medium`));
+        const translatedNextFractions = this.nextPickup.fractions.map(key => this.homey.__(`fractions.${key}.medium`));
         str += ` ${translatedNextFractions.join(', ')}`;
       }
       await this.setCapabilityValue(cap, str);
@@ -167,6 +173,7 @@ module.exports = class RenovasjonDevice extends Homey.Device {
   }
 
   async updateCapabilities(settings = this.getSettings()) {
+    this.log('Updating capabilities for RenovasjonDevice');
     for (const cap of this.getCapabilities()) {
       await this.updateCapability(cap, settings);
     }
@@ -174,13 +181,11 @@ module.exports = class RenovasjonDevice extends Homey.Device {
 
   async updateData() {
     this.log('Updating data for RenovasjonDevice');
-    const provider = this.getStoreValue('provider');
     const addressData = this.getStoreValue('addressData');
     const addressUUID = this.getStoreValue('addressUUID');
 
     this.fractionDates = await this.adapter.fetchFractionDates(addressData, addressUUID);
-    this.nextDisposals = this.getNextDisposals(this.fractionDates);
-    this.updateCapabilities();
+    this.nextPickup = this.getNextPickup(this.fractionDates);
   }
 
 };

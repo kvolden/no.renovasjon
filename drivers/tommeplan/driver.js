@@ -125,11 +125,12 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
   scheduleMidnightUpdate() {
     const now = new Date();
     const millisTillMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0, 0, 5, 0) - now;
-    this._midnightTimer = setTimeout(() => {
+    this._midnightTimer = setTimeout(async () => {
       this.log('Midnight update triggered');
-      this.getDevices().forEach(device => {
-        device.updateData();
-      });
+      await Promise.all(this.getDevices().forEach(async (device) => {
+        await device.updateData();
+        await device.updateCapabilities();
+      }));
       this.scheduleMidnightUpdate();
     }, millisTillMidnight);
   }
