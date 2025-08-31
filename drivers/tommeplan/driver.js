@@ -73,7 +73,6 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
     let addressData = null;
     session.setHandler('save_details', async (data) => {
       addressData = data;
-      this.log('Details saved:', addressData);
     });
 
     session.setHandler('list_devices', async () => {
@@ -81,7 +80,6 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       if (!provider) {
         return [];
       }
-      this.log('Paring with provider:', provider);
 
       let addrString = addressData.adressenavn;
       if (addressData.nummer !== '') {
