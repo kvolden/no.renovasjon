@@ -188,4 +188,9 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     this.nextPickup = this.getNextPickup(this.fractionDates);
   }
 
+  async update() {
+    await this.updateData();
+    await this.updateCapabilities();
+  }
+
 };
