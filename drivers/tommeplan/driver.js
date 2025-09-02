@@ -12,6 +12,7 @@ const HRAAdapter = require('../../lib/adapters/hra');
 const OsloKommuneAdapter = require('../../lib/adapters/oslokommune');
 const MarenAdapter = require('../../lib/adapters/maren');
 const FredrikstadKommuneAdapter = require('../../lib/adapters/fredrikstadkommune');
+const VKRAdapter = require('../../lib/adapters/vkr');
 
 module.exports = class RenovasjonDriver extends Homey.Driver {
 
@@ -32,6 +33,7 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       "oslokommune": new OsloKommuneAdapter(),
       "maren": new MarenAdapter(),
       "fredrikstadkommune": new FredrikstadKommuneAdapter(),
+      "vkr": new VKRAdapter(),
     };
 
     this.scheduleMidnightUpdate();
