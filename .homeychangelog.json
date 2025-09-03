@@ -13,5 +13,8 @@
   },
   "0.0.5": {
     "en": "Added support for SIM, VKR and unlisted Min Renovasjon municipalities."
+  },
+  "0.0.6": {
+    "en": "Fixed bug where 'fetch' is not defined on Homey 2019"
   }
 }
