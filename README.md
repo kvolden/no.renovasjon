@@ -21,3 +21,4 @@ Waste services currently supported:
 - IVAR Renovasjon Ryfylke
 - Nordjord Miljøverk (NOMIL)
 - Søndre Helgeland Miljøverk (SHMIL)
+- Utsira Kommune (via HIM)
