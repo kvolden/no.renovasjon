@@ -12,5 +12,12 @@ Nåværende støttede avfallstjenester:
 - MAREN
 - Fredrikstad Kommune
 - Valdres Kommunale Renovasjon (VKR)
-- Sunnhordland Interkommunale Miljøverk IKS (SIM)
-- Renovasjon i Nordhordland, Gulen og Solund (NGIR).
+- Sunnhordland Interkommunale Miljøverk (SIM)
+- Renovasjon i Nordhordland, Gulen og Solund (NGIR)
+- BIR (BIR-VH ikke inkludert)
+- Haugaland Interkommunale Miljøverk (HIM)
+- Hallingdal Renovasjon
+- IRIS-Salten
+- IVAR Renovasjon Ryfylke
+- Nordjord Miljøverk (NOMIL)
+- Søndre Helgeland Miljøverk (SHMIL)

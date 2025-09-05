@@ -15,6 +15,13 @@ const FredrikstadKommuneAdapter = require('../../lib/adapters/fredrikstadkommune
 const VKRAdapter = require('../../lib/adapters/vkr');
 const SIMAdapter = require('../../lib/adapters/sim');
 const NGIRAdapter = require('../../lib/adapters/ngir');
+const BIRAdapter = require('../../lib/adapters/bir');
+const HIMAdapter = require('../../lib/adapters/him');
+const HRAdapter = require('../../lib/adapters/hr');
+const IRISAdapter = require('../../lib/adapters/iris');
+const IVARAdapter = require('../../lib/adapters/ivar');
+const NOMILAdapter = require('../../lib/adapters/nomil');
+const SHMILAdapter = require('../../lib/adapters/shmil');
 
 module.exports = class RenovasjonDriver extends Homey.Driver {
 
@@ -38,6 +45,13 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       "vkr": new VKRAdapter(),
       "sim": new SIMAdapter(),
       "ngir": new NGIRAdapter(),
+      "bir": new BIRAdapter(),
+      "him": new HIMAdapter(),
+      "hr": new HRAdapter(),
+      "iris": new IRISAdapter(),
+      "ivar": new IVARAdapter(),
+      "nomil": new NOMILAdapter(),
+      "shmil": new SHMILAdapter(),
     };
 
     this.scheduleMidnightUpdate();
