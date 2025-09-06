@@ -23,6 +23,7 @@ const IVARAdapter = require('../../lib/adapters/ivar');
 const NOMILAdapter = require('../../lib/adapters/nomil');
 const SHMILAdapter = require('../../lib/adapters/shmil');
 const UtsiraAdapter = require('../../lib/adapters/utsira');
+const AvfallSorAdapter = require('../../lib/adapters/avfallsor');
 
 module.exports = class RenovasjonDriver extends Homey.Driver {
 
@@ -54,6 +55,7 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       "nomil": new NOMILAdapter(),
       "shmil": new SHMILAdapter(),
       "utsira": new UtsiraAdapter(),
+      "avfallsor": new AvfallSorAdapter(),
     };
 
     this.scheduleMidnightUpdate();
