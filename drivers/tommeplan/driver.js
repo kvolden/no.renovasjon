@@ -114,6 +114,10 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       }
 
       const addressUUID = await this.getAdapter(provider).fetchAddressUUID(addressData);
+      // If the address lookup failed, return empty list of devices
+      if (!addressUUID) {
+        return [];
+      }
       const baseName = this.manifest.name[this.homey.i18n.getLanguage()] || this.manifest.name.en;
 
       return [
