@@ -5,7 +5,7 @@ Waste services currently supported:
 - Trondheim Renholdsverk (TRV)
 - GLØR
 - Innherred Renovasjon (IR)
-- Min Renovasjon
+- Min Renovasjon*
 - Fosen Renovasjon
 - Hadeland og Ringerike Avfallsselskap (HRA)
 - Oslo Kommune
@@ -22,3 +22,5 @@ Waste services currently supported:
 - Nordjord Miljøverk (NOMIL)
 - Søndre Helgeland Miljøverk (SHMIL)
 - Utsira Kommune (via HIM)
+
+*Note that Min Renovasjon is an umbrella service that covers many others. Even if you don't see your provider in the list, try your address and see if it works.
