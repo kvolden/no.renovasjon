@@ -16,5 +16,8 @@
   },
   "0.0.6": {
     "en": "Fixed bug where 'fetch' is not defined on Homey 2019"
+  },
+  "0.0.7": {
+    "en": "Added more providers, added adapter testing"
   }
 }
