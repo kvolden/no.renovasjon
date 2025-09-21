@@ -19,5 +19,8 @@
   },
   "0.0.7": {
     "en": "Added more providers, added adapter testing"
+  },
+  "0.0.8": {
+    "en": "Fixed bug in IR and MinRenovasjon when looking up municipality."
   }
 }
