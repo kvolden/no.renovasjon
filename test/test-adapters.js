@@ -105,12 +105,23 @@ async function testMunicipality(adapter, muni) {
   return hasDate;
 }
 
+// Test the interfacing from the driver
+async function testInterfacing(adapter, supportedMunicipalities) {
+  const randomSupportedMuni = supportedMunicipalities[Math.floor(Math.random() * supportedMunicipalities.length)];
+  const nonSupportedMuni = '5000'; // Not supported because it doesn't exist
+
+  const supportsSupported = adapter.adapter.coversMunicipality(randomSupportedMuni);
+  const supportsNonSupported = adapter.adapter.coversMunicipality(nonSupportedMuni);
+
+  return supportsSupported && !supportsNonSupported;
+}
+
 async function runTest(adapter) {
-  const supportedMunicipalites = await adapter.adapter._getAllMunicipalities();
+  const supportedMunicipalities = await adapter.adapter._getAllMunicipalities();
 
   if (updateMode) {
     if (adapter.testAllMunicipalities) {
-      for (const muni of supportedMunicipalites) {
+      for (const muni of supportedMunicipalities) {
         // Skip if municipality already has an address in file. If a previously working
         // address stops working, manually remove it from the file.
         if (!addressStore.has(muni)) {
@@ -121,7 +132,7 @@ async function runTest(adapter) {
     else {
       // When testAll.. is false, find one of the supported municipalities that is
       // missing from the file (if any).
-      const candidates = supportedMunicipalites.filter(m => !addressStore.has(m));
+      const candidates = supportedMunicipalities.filter(m => !addressStore.has(m));
       if (candidates.length > 0) {
         const randomMuni = candidates[Math.floor(Math.random() * candidates.length)];
         await updateMunicipality(adapter, randomMuni);
@@ -133,9 +144,14 @@ async function runTest(adapter) {
     return true;
   }
   else {
+    const interfaceOk = testInterfacing(adapter, supportedMunicipalities)
+    if (!interfaceOk) {
+      console.log(`${adapter.adapter.getName()}: Interface check FAILED`);
+      return false;
+    }
     if (adapter.testAllMunicipalities) {
       let success = true;
-      for (const muni of supportedMunicipalites) {
+      for (const muni of supportedMunicipalities) {
         const ok = await testMunicipality(adapter, muni);
         console.log(`${adapter.adapter.getName()} ${muni}: ${ok ? 'PASSED' : 'FAILED'}`);
         success = success && ok;
@@ -143,7 +159,7 @@ async function runTest(adapter) {
       return success;
     }
     else {
-      const candidates = supportedMunicipalites.filter(m => addressStore.has(m));
+      const candidates = [...supportedMunicipalities].filter(m => addressStore.has(m));
       if (candidates.length === 0) {
         console.log(`${adapter.adapter.getName()}: No municipalities in address store!`);
         return false;
