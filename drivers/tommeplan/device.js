@@ -184,8 +184,13 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     const addressData = this.getStoreValue('addressData');
     const addressUUID = this.getStoreValue('addressUUID');
 
-    this.fractionDates = await this.adapter.fetchFractionDates(addressData, addressUUID);
-    this.nextPickup = this.getNextPickup(this.fractionDates);
+    try {
+      this.fractionDates = await this.adapter.fetchFractionDates(addressData, addressUUID);
+      this.nextPickup = this.getNextPickup(this.fractionDates);
+    }
+    catch (error) {
+      this.error(`${this.adapter.getName()} could not fetch fraction dates:`, error);
+    }
   }
 
   async update() {

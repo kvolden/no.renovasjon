@@ -101,9 +101,11 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
 
     session.setHandler('list_devices', async () => {
       const provider = await this.getProviderForMunicipality(addressData.kommunenummer);
+      // If no provider found, notify user
       if (!provider) {
-        return [];
+        throw new Error(this.homey.__('pair.errors.unsupported_municipality'));
       }
+      const adapter = this.getAdapter(provider);
 
       let addrString = addressData.adressenavn;
       if (addressData.nummer !== '') {
@@ -113,10 +115,20 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
         addrString += ` ${addressData.bokstav}`;
       }
 
-      const addressUUID = await this.getAdapter(provider).fetchAddressUUID(addressData);
-      // If the address lookup failed, return empty list of devices
-      if (!addressUUID) {
-        return [];
+      let addressUUID;
+      try {
+        addressUUID = await adapter.fetchAddressUUID(addressData);
+        // If the address lookup failed, notify user
+        if (!addressUUID) {
+          throw new Error(this.homey.__('pair.errors.unsupported_address'));
+        }
+      }
+      catch (error) {
+        // Network errors both logged to console and notified to user
+        // NOTE: This assumes all errors are network errors, which is assuming a little too much.
+        // Consider adding error type distinctions.
+        this.error(`${adapter.getName()} could not fetch address UUID:`, error);
+        throw new Error(this.homey.__('pair.errors.network_error'));
       }
       const baseName = this.manifest.name[this.homey.i18n.getLanguage()] || this.manifest.name.en;
 
@@ -129,7 +141,7 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
           settings: {
             streetAddress: addrString,
             municipality: addressData.kommunenavn,
-            provider: this.getAdapter(provider).getName()
+            provider: adapter.getName()
           },
           store: {
             provider,
@@ -163,7 +175,7 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
 
   // Return a list of available adapters with id and label for pairing UI
   getAdaptersList() {
-    console.log('Fetching adapters list');
+    this.log('Fetching adapters list');
     return Object.entries(this.adapters).map(([id, adapter]) => ({
       id,
       label: adapter.getName() || id,
@@ -174,10 +186,15 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
     return this.adapters[provider];
   }
 
- async getProviderForMunicipality(municipalityCode) {
+  async getProviderForMunicipality(municipalityCode) {
     for (const [id, adapter] of Object.entries(this.adapters)) {
-      if (await adapter.coversMunicipality(municipalityCode)) {
-        return id;
+      try{
+        if (await adapter.coversMunicipality(municipalityCode)) {
+          return id;
+        }
+      }
+      catch (error) {
+        this.error(`Could not check coverage of ${adapter.getName()}:`, error);
       }
     }
     return null;
