@@ -22,5 +22,6 @@ Nåværende støttede avfallstjenester:
 - Nordjord Miljøverk (NOMIL)
 - Søndre Helgeland Miljøverk (SHMIL)
 - Utsira Kommune (via HIM)
+- Sandnes Kommune
 
 *Merk at Min Renovasjon er en tjeneste som dekker mange andre. Selv om du ikke ser din tilbyder i listen, prøv adressen din og se om det virker.

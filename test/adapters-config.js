@@ -23,6 +23,7 @@ const adapterConfigs = [
   { name: 'shmil', testAll: true },
   { name: 'utsira', testAll: true },
   { name: 'avfallsor', testAll: true },
+  { name: 'sandneskommune', testAll: true },
 ];
 
 const adapters = {};
