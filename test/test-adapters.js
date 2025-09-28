@@ -74,13 +74,14 @@ async function getRandomAddress(municipalityNumber, maxRetries = 5) {
 async function updateMunicipality(adapter, muni, maxRetries = 8) {
   console.log(`Updating address for ${adapter.adapter.getName()} kommune ${muni}...`);
   for (let attempt = 0; attempt < maxRetries; attempt ++) {
+    console.log(`  Attempt number ${attempt + 1}...`);
     const addr = await getRandomAddress(muni);
     if (!addr) {
       console.log(`  Failed to get random address for ${muni}`);
       return false;
     }
     const uuid = await adapter.adapter.fetchAddressUUID(addr).catch(() => null);
-    if (!uuid) return false;
+    if (!uuid) continue;
     const fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid).catch(() => null);
     const hasDate = fetchedDates && Object.values(fetchedDates).some(f => f && f instanceof Date);
     if (!hasDate) continue;
@@ -89,6 +90,7 @@ async function updateMunicipality(adapter, muni, maxRetries = 8) {
     console.log(`  Saved valid address for ${muni}: ${addr.adressenavn} ${addr.nummer}${addr.bokstav || ''}`);
     return true;
   }
+  console.log(`  Failed to get random address for ${muni}`);
   return false;
 }
 
@@ -99,7 +101,10 @@ async function testMunicipality(adapter, muni) {
     return false;
   }
   const uuid = await adapter.adapter.fetchAddressUUID(addr).catch(() => null);
-  if (!uuid) return false;
+  if (!uuid) {
+    console.log(`  Failed to get address UUID for address in ${muni}, test fails.`);
+    return false;
+  }
   const fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid).catch(() => null);
   const hasDate = fetchedDates && Object.values(fetchedDates).some(f => f && f instanceof Date);
   return hasDate;
