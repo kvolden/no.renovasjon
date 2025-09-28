@@ -24,6 +24,7 @@ const adapterConfigs = [
   { name: 'utsira', testAll: true },
   { name: 'avfallsor', testAll: true },
   { name: 'sandneskommune', testAll: true },
+  { name: 'stavangerkommune', testAll: true },
 ];
 
 const adapters = {};
