@@ -5,7 +5,7 @@ Waste services currently supported:
 - Trondheim Renholdsverk (TRV)
 - GLØR
 - Innherred Renovasjon (IR)
-- Min Renovasjon
+- Min Renovasjon*
 - Fosen Renovasjon
 - Hadeland og Ringerike Avfallsselskap (HRA)
 - Oslo Kommune
