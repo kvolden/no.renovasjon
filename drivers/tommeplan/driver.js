@@ -26,6 +26,7 @@ const UtsiraAdapter = require('../../lib/adapters/utsira');
 const AvfallSorAdapter = require('../../lib/adapters/avfallsor');
 const SandnesKommuneAdapter = require('../../lib/adapters/sandneskommune');
 const StavangerKommuneAdapter = require('../../lib/adapters/stavangerkommune');
+const SteinkjerKommuneAdapter = require('../../lib/adapters/steinkjerkommune');
 
 module.exports = class RenovasjonDriver extends Homey.Driver {
 
@@ -60,6 +61,7 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       "avfallsor": new AvfallSorAdapter(),
       "sandneskommune": new SandnesKommuneAdapter(),
       "stavangerkommune": new StavangerKommuneAdapter(),
+      "steinkjerkommune": new SteinkjerKommuneAdapter(),
     };
 
     this.scheduleMidnightUpdate();
