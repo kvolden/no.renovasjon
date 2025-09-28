@@ -25,5 +25,6 @@ Nåværende støttede avfallstjenester:
 - Sandnes Kommune
 - Stavanger Kommune
 - Steinkjer Kommune
+- Time Kommune
 
 *Merk at Min Renovasjon er en tjeneste som dekker mange andre. Selv om du ikke ser din tilbyder i listen, prøv adressen din og se om det virker.
