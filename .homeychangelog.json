@@ -25,5 +25,8 @@
   },
   "0.0.9": {
     "en": "Minor fixes, error handling overhaul"
+  },
+  "0.0.10": {
+    "en": "Added support for Sandnes, Stavanger, Time; fixed next pickup flowcard; removed unnecessary adapters; improved testing."
   }
 }
