@@ -72,19 +72,18 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
     const cardConditionGarbageIsCollected = this.homey.flow.getConditionCard('garbage-is-collected');
     cardConditionGarbageIsCollected.registerRunListener(async (args, state) => {
       const fractions = await args.device.fractionDates;
-      let nearestDate = null;
+      const today = new Date();
+      today.setHours(0,0,0,0);
       for (const [, fractionDate] of Object.entries(fractions)) {
         if (!fractionDate) {
           continue;
         }
-        if (!nearestDate || fractionDate < nearestDate) {
-          nearestDate = fractionDate;
+        const diffDays = parseInt((fractionDate - today) / (1000 * 60 * 60 * 24));
+        if (diffDays == args.days) {
+          return true;
         }
       }
-      const today = new Date();
-      today.setHours(0,0,0,0);
-      const diffDays = parseInt((nearestDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-      return diffDays == args.days;
+      return false;
     });
 
     const cardConditionGarbageTypeIsCollected = this.homey.flow.getConditionCard('fraction-is-collected');

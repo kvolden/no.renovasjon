@@ -7,12 +7,12 @@
         "no": "Avfall !{{hentes|hentes ikke}}"
       },
       "titleFormatted": {
-        "en": "Next garbage collection !{{is|is not}} in [[days]] days",
-        "no": "Neste henting av avfall !{{er|er ikke}} om [[days]] dager"
+        "en": "Garbage collection !{{is|is not}} in [[days]] days",
+        "no": "Henting av avfall !{{er|er ikke}} om [[days]] dager"
       },
       "hint": {
-        "en": "Next garbage collection in N days (0 means same day)",
-        "no": "Neste henting av avfall om N dager (0 betyr samme dag)"
+        "en": "Next garbage collection of at least one fraction in N days (0 means same day)",
+        "no": "Neste henting av minst en avfallstype om N dager (0 betyr samme dag)"
       },
       "args": [
         {
