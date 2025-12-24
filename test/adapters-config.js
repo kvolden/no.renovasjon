@@ -9,7 +9,6 @@ const adapterConfigs = [
   { name: 'fosenrenovasjon', testAll: true },
   { name: 'hra', testAll: true },
   { name: 'oslokommune', testAll: true },
-  { name: 'maren', testAll: true },
   { name: 'fredrikstadkommune', testAll: true },
   { name: 'vkr', testAll: true },
   { name: 'sim', testAll: true },

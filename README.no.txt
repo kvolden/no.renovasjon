@@ -9,7 +9,6 @@ Nåværende støttede avfallstjenester:
 - Fosen Renovasjon
 - Hadeland og Ringerike Avfallsselskap (HRA)
 - Oslo Kommune
-- MAREN
 - Fredrikstad Kommune
 - Valdres Kommunale Renovasjon (VKR)
 - Sunnhordland Interkommunale Miljøverk (SIM)

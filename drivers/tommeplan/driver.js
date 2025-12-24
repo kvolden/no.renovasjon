@@ -10,7 +10,6 @@ const MinRenovasjonAdapter = require('../../lib/adapters/minrenovasjon');
 const FosenRenovasjonAdapter = require('../../lib/adapters/fosenrenovasjon');
 const HRAAdapter = require('../../lib/adapters/hra');
 const OsloKommuneAdapter = require('../../lib/adapters/oslokommune');
-const MarenAdapter = require('../../lib/adapters/maren');
 const FredrikstadKommuneAdapter = require('../../lib/adapters/fredrikstadkommune');
 const VKRAdapter = require('../../lib/adapters/vkr');
 const SIMAdapter = require('../../lib/adapters/sim');
@@ -46,7 +45,6 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       "fosenrenovasjon": new FosenRenovasjonAdapter(),
       "hra": new HRAAdapter(),
       "oslokommune": new OsloKommuneAdapter(),
-      "maren": new MarenAdapter(),
       "fredrikstadkommune": new FredrikstadKommuneAdapter(),
       "vkr": new VKRAdapter(),
       "sim": new SIMAdapter(),
