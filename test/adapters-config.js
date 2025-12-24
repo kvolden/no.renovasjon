@@ -24,7 +24,6 @@ const adapterConfigs = [
   { name: 'avfallsor', testAll: true },
   { name: 'sandneskommune', testAll: true },
   { name: 'stavangerkommune', testAll: true },
-  { name: 'steinkjerkommune', testAll: true },
   { name: 'timekommune', testAll: true },
 ];
 
