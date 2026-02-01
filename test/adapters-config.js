@@ -25,6 +25,7 @@ const adapterConfigs = [
   { name: 'sandneskommune', testAll: true },
   { name: 'stavangerkommune', testAll: true },
   { name: 'timekommune', testAll: true },
+  { name: 'sum', testAll: true },
 ];
 
 const adapters = {};

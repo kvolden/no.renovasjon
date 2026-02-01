@@ -24,5 +24,6 @@ Waste services currently supported:
 - Sandnes Kommune
 - Stavanger Kommune
 - Time Kommune
+- Sunnfjord Miljøverk IKS (SUM)
 
 *Note that Min Renovasjon is an umbrella service that covers many others. Even if you don't see your provider in the list, try your address and see if it works.
