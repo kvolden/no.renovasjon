@@ -2,22 +2,39 @@
 
 const fs = require("fs");
 const path = require("path");
+const { parseArgs } = require('node:util');
+const { adapters } = require('./adapters-config');
 
-// --- Configuration ---
-const args = process.argv.slice(2); // alle CLI-argumenter
-const updateMode = args.includes("--update-addresses");
-
+// --- Parse command line arguments ---
+let updateMode = false;
 let adapterFilter = null;
-// ex: "--adapters remidt,trv"
-const idx = args.indexOf("--adapters");
-if (idx !== -1 && idx + 1 < args.length) {
-  adapterFilter = args[idx + 1].split(","); 
+
+const options = {
+  'update-addresses': {
+    type: 'boolean',
+  },
+  'adapters': {
+    type: 'string',
+  },
+};
+
+try {
+  const { values } = parseArgs({
+    options,
+    strict: true,
+    allowPositionals: false
+  });
+
+  updateMode = !!values['update-addresses'];
+  adapterFilter = values.adapters ? values.adapters.split(',') : null;
+}
+catch (e) {
+  console.error(`Error: ${e.message}`);
+  console.log("Allowed flags: --update-addresses, --adapters <value1,adapter2,...>");
+  process.exit(1);
 }
 
 const addressesFile = path.join(__dirname, "valid-addresses.json");
-
-// --- Create adapter list ---
-const { adapters } = require('./adapters-config');
 
 // --- Address storage ---
 function loadValidAddresses() {
@@ -80,9 +97,9 @@ async function updateMunicipality(adapter, muni, maxRetries = 8) {
       console.log(`  Failed to get random address for ${muni}`);
       return false;
     }
-    const uuid = await adapter.adapter.fetchAddressUUID(addr).catch(() => null);
+    const uuid = await adapter.adapter.fetchAddressUUID(addr);
     if (!uuid) continue;
-    const fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid).catch(() => null);
+    const fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid);
     const hasDate = fetchedDates && Object.values(fetchedDates).some(f => f && f instanceof Date);
     if (!hasDate) continue;
     // OK – store
@@ -100,24 +117,25 @@ async function testMunicipality(adapter, muni) {
     console.log(`  Missing address for ${muni}, test fails.`);
     return false;
   }
-  const uuid = await adapter.adapter.fetchAddressUUID(addr).catch(() => null);
+  const uuid = await adapter.adapter.fetchAddressUUID(addr);
   if (!uuid) {
     console.log(`  Failed to get address UUID for address in ${muni}, test fails.`);
     return false;
   }
-  const fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid).catch(() => null);
+  const fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid);
   const hasDate = fetchedDates && Object.values(fetchedDates).some(f => f && f instanceof Date);
   return hasDate;
 }
 
 // Test the interfacing from the driver
 async function testInterfacing(adapter, supportedMunicipalities) {
-  const randomSupportedMuni = supportedMunicipalities[Math.floor(Math.random() * supportedMunicipalities.length)];
+  const randomIndex = Math.floor(Math.random() * supportedMunicipalities.size);
+  const randomSupportedMuni = [...supportedMunicipalities][randomIndex];
   const nonSupportedMuni = '5000'; // Not supported because it doesn't exist
 
-  const supportsSupported = adapter.adapter.coversMunicipality(randomSupportedMuni);
-  const supportsNonSupported = adapter.adapter.coversMunicipality(nonSupportedMuni);
-
+  const supportsSupported = await adapter.adapter.coversMunicipality(randomSupportedMuni);
+  const supportsNonSupported = await adapter.adapter.coversMunicipality(nonSupportedMuni);
+  console.log(`random supported muni: ${randomSupportedMuni}`);
   return supportsSupported && !supportsNonSupported;
 }
 
@@ -137,7 +155,7 @@ async function runTest(adapter) {
     else {
       // When testAll.. is false, find one of the supported municipalities that is
       // missing from the file (if any).
-      const candidates = supportedMunicipalities.filter(m => !addressStore.has(m));
+      const candidates = [...supportedMunicipalities].filter(m => !addressStore.has(m));
       if (candidates.length > 0) {
         const randomMuni = candidates[Math.floor(Math.random() * candidates.length)];
         await updateMunicipality(adapter, randomMuni);
@@ -149,7 +167,7 @@ async function runTest(adapter) {
     return true;
   }
   else {
-    const interfaceOk = testInterfacing(adapter, supportedMunicipalities)
+    const interfaceOk = await testInterfacing(adapter, supportedMunicipalities);
     if (!interfaceOk) {
       console.log(`${adapter.adapter.getName()}: Interface check FAILED`);
       return false;
