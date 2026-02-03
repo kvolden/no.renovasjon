@@ -28,5 +28,8 @@
   },
   "0.0.10": {
     "en": "Added support for Sandnes, Stavanger, Time; fixed next pickup flowcard; removed unnecessary adapters; improved testing."
+  },
+  "1.1.0": {
+    "en": "Fixed graphics, added support for SUM, improved testing."
   }
 }
