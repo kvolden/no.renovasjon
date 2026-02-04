@@ -28,6 +28,7 @@ const StavangerKommuneAdapter = require('../../lib/adapters/stavangerkommune');
 const TimeKommuneAdapter = require('../../lib/adapters/timekommune');
 const SUMAdapter = require('../../lib/adapters/sum');
 const SORAdapter = require('../../lib/adapters/sor');
+const LASAdapter = require('../../lib/adapters/las');
 
 module.exports = class RenovasjonDriver extends Homey.Driver {
 
@@ -64,6 +65,7 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       "timekommune": new TimeKommuneAdapter(),
       "sum": new SUMAdapter(),
       "sor": new SORAdapter(),
+      "las": new LASAdapter(),
     };
 
     this.scheduleMidnightUpdate();

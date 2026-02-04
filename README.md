@@ -26,5 +26,6 @@ Waste services currently supported:
 - Time Kommune
 - Sunnfjord Miljøverk IKS (SUM)
 - Solør Renovasjon IKS (SOR)
+- Lofoten Avfallsselskap IKS (LAS)
 
 *Note that Min Renovasjon is an umbrella service that covers many others. Even if you don't see your provider in the list, try your address and see if it works.
