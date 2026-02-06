@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body class="homey-widget">
+    <div class="flex-container">
+      <div id="left-side" class="side">
+        <div id="pickup-days"></div>
+        <div id="pickup-date"></div>
+      </div>
+      <div id="right-side" class="side">
+        <div id="frac-general" class="frac">
+          <img src="icons/general.svg" />
+        </div>
+        <div id="frac-paper" class="frac">
+          <img src="icons/paper.svg" />
+        </div>
+        <div id="frac-plastic" class="frac">
+          <img src="icons/plastic.svg" />
+        </div>
+        <div id="frac-food" class="frac">
+          <img src="icons/food.svg" />
+        </div>
+        <div id="frac-glass" class="frac">
+          <img src="icons/glass.svg" />
+        </div>
+        <div id="frac-garden" class="frac">
+          <img src="icons/garden.svg" />
+        </div>
+        <div id="frac-hazardous" class="frac">
+          <img src="icons/hazardous.svg" />
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      function onHomeyReady(Homey) {
+        Homey.ready();
+        updateWidget(Homey);
+        Homey.on("dataUpdated", (payload) => {
+          if (payload.deviceId === Homey.getDeviceIds()[0]) {
+            updateWidget(Homey);
+          }
+        });
+      }
+
+      function formatDate(Homey, date) {
+        const targetDate = new Date(date);
+        const options = { day: 'numeric', month: 'short' };
+        const language = Homey._language;
+        return targetDate.toLocaleDateString(language, options);
+      }
+
+      function daysUntil(Homey, date) {
+        const today = new Date();
+        const targetDate = new Date(date);
+        const diffTime = targetDate - today;
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      }
+
+      async function updateWidget(Homey) {
+        const deviceId = Homey.getDeviceIds()[0];
+        const nextPickup = await Homey.api('GET', `/get-next?deviceId=${deviceId}`);
+        const daysLeft = daysUntil(Homey, nextPickup.date);
+        const pickupDaysElem = document.getElementById('pickup-days');
+        pickupDaysElem.textContent = `${daysLeft} ${Homey.__('grammar.days_unit')}`;
+        pickupDaysElem.style.color = daysLeft <= 1 ? 'var(--homey-text-color-warning)' : 'var(--homey-text-color)';
+
+        document.getElementById('pickup-date').textContent = formatDate(Homey, nextPickup.date);
+
+        for (const frac of ['general', 'paper', 'plastic', 'food', 'glass', 'garden', 'hazardous']) {
+          const hasFrac = nextPickup.fractions.includes(frac);
+          document.getElementById(`frac-${frac}`).style.display = hasFrac ? 'flex' : 'none';
+        }
+      }
+    </script>
+  </body>
+</html>

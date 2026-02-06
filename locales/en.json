@@ -50,6 +50,7 @@
   "grammar": {
     "day": "day",
     "days": "days",
+    "days_unit": "d",
     "until": "until"
   }
 }

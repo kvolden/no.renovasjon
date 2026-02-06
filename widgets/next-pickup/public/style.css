@@ -1,0 +1,70 @@
+.flex-container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.side {
+  display: flex;
+  height: 100%;
+}
+#left-side {
+  flex: 0 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 100px;
+}
+#right-side {
+  flex: 1 1 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+  gap: 5px;
+}
+#pickup-days {
+  font-size: var(--homey-font-size-xxlarge);
+  font-weight: var(--homey-font-weight-bold);
+}
+#pickup-date {
+  color: var(--homey-text-color-light);
+  margin-top: 5px;
+  margin-left: 2px;
+}
+.frac {
+  flex: 0 1 50px;
+  max-width: 50px;
+  max-height: 50px;
+  box-sizing: border-box;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--homey-border-radius-default);
+}
+.frac img {
+  max-height: 100%;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 20%;
+}
+#frac-general {
+  background-color: #141414;
+}
+#frac-paper {
+  background-color: #0080ba;
+}
+#frac-plastic {
+  background-color: #921e80;
+}
+#frac-food {
+  background-color: #00a04b;
+}
+#frac-glass {
+  background-color: #1eab88;
+}
+#frac-garden {
+  background-color: #056b33;
+}
+#frac-hazardous {
+  background-color: #e10f1e;
+}

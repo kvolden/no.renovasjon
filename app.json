@@ -364,6 +364,27 @@
       "id": "tommeplan"
     }
   ],
+  "widgets": {
+    "next-pickup": {
+      "name": {
+        "en": "Next garbage pickup",
+        "no": "Neste søppelhenting"
+      },
+      "height": 100,
+      "settings": [],
+      "api": {
+        "getNext": {
+          "method": "GET",
+          "path": "/get-next"
+        }
+      },
+      "devices": {
+        "type": "app",
+        "singular": true
+      },
+      "id": "next-pickup"
+    }
+  },
   "capabilities": {
     "pickup_food": {
       "type": "string",

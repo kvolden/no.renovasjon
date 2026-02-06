@@ -187,6 +187,7 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     try {
       this.fractionDates = await this.adapter.fetchFractionDates(addressData, addressUUID);
       this.nextPickup = this.getNextPickup(this.fractionDates);
+      this.homey.api.realtime('dataUpdated', { deviceId: this.getId() });
     }
     catch (error) {
       this.error(`${this.adapter.getName()} could not fetch fraction dates:`, error);
