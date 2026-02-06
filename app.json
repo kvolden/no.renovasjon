@@ -138,6 +138,13 @@
                   "en": "Hazardous waste",
                   "no": "Farlig avfall"
                 }
+              },
+              {
+                "id": "garden",
+                "label": {
+                  "en": "Garden waste",
+                  "no": "Hageavfall"
+                }
               }
             ]
           },
