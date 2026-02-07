@@ -97,9 +97,23 @@ async function updateMunicipality(adapter, muni, maxRetries = 8) {
       console.log(`  Failed to get random address for ${muni}`);
       return false;
     }
-    const uuid = await adapter.adapter.fetchAddressUUID(addr);
+
+    let uuid;
+    try {
+      uuid = await adapter.adapter.fetchAddressUUID(addr);
+    } catch (e) {
+      console.log(`  fetchAddressUUID failed: ${e.message}`);
+      return false;
+    }
     if (!uuid) continue;
-    const fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid);
+
+    let fetchedDates;
+    try {
+      fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid);
+    } catch (e) {
+      console.log(`  fetchFractionDates failed: ${e.message}`);
+      return false;
+    }
     const hasDate = fetchedDates && Object.values(fetchedDates).some(f => f && f instanceof Date);
     if (!hasDate) continue;
     // OK – store
@@ -117,12 +131,24 @@ async function testMunicipality(adapter, muni) {
     console.log(`  Missing address for ${muni}, test fails.`);
     return false;
   }
-  const uuid = await adapter.adapter.fetchAddressUUID(addr);
+  let uuid;
+  try {
+    uuid = await adapter.adapter.fetchAddressUUID(addr);
+  } catch (e) {
+    console.log(`  fetchAddressUUID failed: ${e.message}`);
+    return false;
+  }
   if (!uuid) {
     console.log(`  Failed to get address UUID for address in ${muni}, test fails.`);
     return false;
   }
-  const fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid);
+  let fetchedDates;
+  try {
+    fetchedDates = await adapter.adapter.fetchFractionDates(addr, uuid);
+  } catch (e) {
+    console.log(`  fetchFractionDates failed: ${e.message}`);
+    return false;
+  }
   const hasDate = fetchedDates && Object.values(fetchedDates).some(f => f && f instanceof Date);
   return hasDate;
 }
@@ -135,12 +161,18 @@ async function testInterfacing(adapter, supportedMunicipalities) {
 
   const supportsSupported = await adapter.adapter.coversMunicipality(randomSupportedMuni);
   const supportsNonSupported = await adapter.adapter.coversMunicipality(nonSupportedMuni);
-  console.log(`random supported muni: ${randomSupportedMuni}`);
   return supportsSupported && !supportsNonSupported;
 }
 
 async function runTest(adapter) {
-  const supportedMunicipalities = await adapter.adapter._getAllMunicipalities();
+  console.log(`\n=== Testing adapter: ${adapter.adapter.getName()} ===`);
+  let supportedMunicipalities;
+  try {
+    supportedMunicipalities = await adapter.adapter._getAllMunicipalities();
+  } catch (e) {
+    console.log(`Failed to get supported municipalities: ${e.message}`);
+    return false;
+  }
 
   if (updateMode) {
     if (adapter.testAllMunicipalities) {
@@ -168,15 +200,15 @@ async function runTest(adapter) {
   }
   else {
     const interfaceOk = await testInterfacing(adapter, supportedMunicipalities);
+    console.log(`Interface check: ${interfaceOk ? 'PASSED' : 'FAILED'}`);
     if (!interfaceOk) {
-      console.log(`${adapter.adapter.getName()}: Interface check FAILED`);
       return false;
     }
     if (adapter.testAllMunicipalities) {
       let success = true;
       for (const muni of supportedMunicipalities) {
         const ok = await testMunicipality(adapter, muni);
-        console.log(`${adapter.adapter.getName()} ${muni}: ${ok ? 'PASSED' : 'FAILED'}`);
+        console.log(`Municipality ${muni}: ${ok ? 'PASSED' : 'FAILED'}`);
         success = success && ok;
       }
       return success;
