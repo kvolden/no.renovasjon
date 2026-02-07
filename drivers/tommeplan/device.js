@@ -184,18 +184,27 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     const addressData = this.getStoreValue('addressData');
     const addressUUID = this.getStoreValue('addressUUID');
 
-    try {
-      this.fractionDates = await this.adapter.fetchFractionDates(addressData, addressUUID);
-      this.nextPickup = this.getNextPickup(this.fractionDates);
-      this.homey.api.realtime('dataUpdated', { deviceId: this.getId() });
-    }
-    catch (error) {
-      this.error(`${this.adapter.getName()} could not fetch fraction dates:`, error);
-    }
+    this.fractionDates = await this.adapter.fetchFractionDates(addressData, addressUUID);
+    this.nextPickup = this.getNextPickup(this.fractionDates);
+    this.homey.api.realtime('dataUpdated', { deviceId: this.getId() });
   }
 
-  async update() {
-    await this.updateData();
+  async update(isRetry = false) {
+    try {
+      await this.updateData();
+    }
+    catch (error) {
+      if (!isRetry) {
+        this.error('Error updating data, retrying immediately:', error);
+        await this.update(true);
+        return;
+      }
+      else {
+        this.error('Error updating data on retry, scheduling retry in 5 minutes:', error);
+        setTimeout(() => this.update(true), 5 * 60 * 1000);
+        return;
+      }
+    }
     await this.updateCapabilities();
   }
 
