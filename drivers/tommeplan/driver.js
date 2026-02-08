@@ -29,6 +29,7 @@ const TimeKommuneAdapter = require('../../lib/adapters/timekommune');
 const SUMAdapter = require('../../lib/adapters/sum');
 const SORAdapter = require('../../lib/adapters/sor');
 const LASAdapter = require('../../lib/adapters/las');
+const KarmoyKommuneAdapter = require('../../lib/adapters/karmoykommune');
 
 module.exports = class RenovasjonDriver extends Homey.Driver {
 
@@ -66,6 +67,7 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
       "sum": new SUMAdapter(),
       "sor": new SORAdapter(),
       "las": new LASAdapter(),
+      "karmoykommune": new KarmoyKommuneAdapter(),
     };
 
     this.scheduleMidnightUpdate();

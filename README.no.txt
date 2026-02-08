@@ -27,5 +27,6 @@ Nåværende støttede avfallstjenester:
 - Sunnfjord Miljøverk IKS (SUM)
 - Solør Renovasjon IKS (SOR)
 - Lofoten Avfallsselskap IKS (LAS)
+- Karmøy Kommune
 
 *Merk at Min Renovasjon er en tjeneste som dekker mange andre. Selv om du ikke ser din tilbyder i listen, prøv adressen din og se om det virker.

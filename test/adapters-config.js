@@ -28,6 +28,7 @@ const adapterConfigs = [
   { name: 'sum', testAll: true },
   { name: 'sor', testAll: true },
   { name: 'las', testAll: true },
+  { name: 'karmoykommune', testAll: true },
 ];
 
 const adapters = {};
