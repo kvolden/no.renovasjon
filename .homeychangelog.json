@@ -31,5 +31,8 @@
   },
   "1.1.0": {
     "en": "Fixed graphics, added support for SUM, improved testing."
+  },
+  "1.2.0": {
+    "en": "Added widget; added support for providers SOR, LAS, Karmøy; fixed Avfall Sør and IRIS; stability improvements."
   }
 }
