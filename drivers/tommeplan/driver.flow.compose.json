@@ -115,5 +115,45 @@
         }
       ]
     }
+  ],
+  "actions": [
+    {
+      "id": "get-fraction-token",
+      "title": {
+        "en": "Get garbage types collected in N days",
+        "no": "Hent hvilke avfallstyper som hentes om N dager"
+      },
+      "titleFormatted": {
+        "en": "Get garbage types collected in [[days]] days",
+        "no": "Hent hvilke avfallstyper som hentes om [[days]] dager"
+      },
+      "hint": {
+        "en": "Returns a string token with the garbage types collected in N days (0 means same day).",
+        "no": "Returnerer en streng-token med avfallstyper som hentes om N dager (0 betyr samme dag)."
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "days",
+          "placeholder": {
+            "en": "Number",
+            "no": "Antall"
+          },
+          "min": 0,
+          "max": 100,
+          "step": 1
+        }
+      ],
+      "tokens": [
+        {
+          "name": "pickup_fractions",
+          "type": "string",
+          "title": {
+            "en": "Garbage types",
+            "no": "Avfallstyper"
+          }
+        }
+      ]
+    }
   ]
 }

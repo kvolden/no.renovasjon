@@ -33,6 +33,22 @@ const KarmoyKommuneAdapter = require('../../lib/adapters/karmoykommune');
 
 module.exports = class RenovasjonDriver extends Homey.Driver {
 
+  diffInCalendarDays(dateFuture, datePast) {
+    const utcFuture = Date.UTC(
+      dateFuture.getFullYear(),
+      dateFuture.getMonth(),
+      dateFuture.getDate()
+    );
+
+    const utcPast = Date.UTC(
+      datePast.getFullYear(),
+      datePast.getMonth(),
+      datePast.getDate()
+    );
+
+    return Math.floor((utcFuture - utcPast) / 86400000);
+  }
+
   /**
    * onInit is called when the driver is initialized.
    */
@@ -77,17 +93,37 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
     cardConditionGarbageIsCollected.registerRunListener(async (args, state) => {
       const fractions = await args.device.fractionDates;
       const today = new Date();
-      today.setHours(0,0,0,0);
       for (const [, fractionDate] of Object.entries(fractions)) {
         if (!fractionDate) {
           continue;
         }
-        const diffDays = parseInt((fractionDate - today) / (1000 * 60 * 60 * 24));
+        const diffDays = this.diffInCalendarDays(fractionDate, today);
         if (diffDays == args.days) {
           return true;
         }
       }
       return false;
+    });
+
+    const cardActionGetFractionToken = this.homey.flow.getActionCard('get-fraction-token');
+    cardActionGetFractionToken.registerRunListener(async (args, state) => {
+      const fractions = await args.device.fractionDates || {};
+      const today = new Date();
+      // Find all fractions picked up in N days
+      const matchingFractions = Object.entries(fractions)
+        .filter(([_, fractionDate]) => {
+          if (!fractionDate) return false;
+          const diffDays = this.diffInCalendarDays(fractionDate, today);
+          return diffDays == args.days;
+        })
+        .map(([key]) => key);
+
+      const translatedFractions = matchingFractions.map(key => args.device.homey.__(`fractions.${key}.medium`));
+      const pickupFractionsString = translatedFractions.join(', ');
+
+      return {
+        pickup_fractions: pickupFractionsString
+      };
     });
 
     const cardConditionGarbageTypeIsCollected = this.homey.flow.getConditionCard('fraction-is-collected');
@@ -98,8 +134,7 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
         return false;
       }
       const today = new Date();
-      today.setHours(0,0,0,0);
-      const diffDays = parseInt((fractionDate - today) / (1000 * 60 * 60 * 24));
+      const diffDays = this.diffInCalendarDays(fractionDate, today);
       return diffDays == args.days;
     });
   }
