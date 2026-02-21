@@ -8,7 +8,6 @@ module.exports = class RenovasjonDevice extends Homey.Device {
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    this.log('RenovasjonDevice has been initialized');
     this.adapter = this.driver.getAdapter(this.getStoreValue('provider'));
     // Update data if the device exists. If not it will be updated in onAdded() after setup.
     if (this.getStoreValue("deviceAdded")) {
@@ -37,7 +36,6 @@ module.exports = class RenovasjonDevice extends Homey.Device {
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    this.log('RenovasjonDevice has been added');
     const addressData = this.getStoreValue('addressData');
     const addressUUID = this.getStoreValue('addressUUID');
     await this.updateData();
@@ -71,27 +69,10 @@ module.exports = class RenovasjonDevice extends Homey.Device {
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
   async onSettings({ oldSettings, newSettings, changedKeys }) {
-    this.log('RenovasjonDevice settings where changed');
     if (changedKeys.some(str => str.startsWith("show_fraction_"))) {
       await this.showAndHideCapabilities(newSettings);
     }
     await this.updateCapabilities(newSettings);
-  }
-
-  /**
-   * onRenamed is called when the user updates the device's name.
-   * This method can be used this to synchronise the name to the device.
-   * @param {string} name The new name
-   */
-  async onRenamed(name) {
-    this.log('RenovasjonDevice was renamed');
-  }
-
-  /**
-   * onDeleted is called when the user deleted the device.
-   */
-  async onDeleted() {
-    this.log('RenovasjonDevice has been deleted');
   }
 
   async ensurePickupNextIsLast(settings) {
@@ -209,14 +190,12 @@ module.exports = class RenovasjonDevice extends Homey.Device {
   }
 
   async updateCapabilities(settings = this.getSettings()) {
-    this.log('Updating capabilities for RenovasjonDevice');
     for (const cap of this.getCapabilities()) {
       await this.updateCapability(cap, settings);
     }
   }
 
   async updateData() {
-    this.log('Updating data for RenovasjonDevice');
     const addressData = this.getStoreValue('addressData');
     const addressUUID = this.getStoreValue('addressUUID');
 
@@ -231,12 +210,12 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     }
     catch (error) {
       if (!isRetry) {
-        this.error('Error updating data, retrying immediately:', error);
+        this.error('Error updating data, retrying immediately:', error.message);
         await this.update(true);
         return;
       }
       else {
-        this.error('Error updating data on retry, scheduling retry in 5 minutes:', error);
+        this.error('Error updating data on retry, scheduling retry in 5 minutes:', error.message);
         setTimeout(() => this.update(true), 5 * 60 * 1000);
         return;
       }
