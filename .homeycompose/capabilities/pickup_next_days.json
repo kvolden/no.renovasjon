@@ -1,0 +1,11 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Next pickup days",
+        "no": "Neste henting dager"
+    },
+    "uiComponent": null,
+    "getable": true,
+    "setable": false,
+    "insights": false
+}

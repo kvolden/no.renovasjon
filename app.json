@@ -223,8 +223,10 @@
         "pickup_general",
         "pickup_hazardous",
         "pickup_garden",
+        "pickup_next",
         "pickup_next_fractions",
-        "pickup_next"
+        "pickup_next_date",
+        "pickup_next_days"
       ],
       "platforms": [
         "local"
@@ -509,6 +511,28 @@
       "setable": false,
       "insights": false,
       "icon": "/drivers/tommeplan/assets/next.svg"
+    },
+    "pickup_next_date": {
+      "type": "string",
+      "title": {
+        "en": "Next pickup date",
+        "no": "Neste henting dato"
+      },
+      "uiComponent": null,
+      "getable": true,
+      "setable": false,
+      "insights": false
+    },
+    "pickup_next_days": {
+      "type": "number",
+      "title": {
+        "en": "Next pickup days",
+        "no": "Neste henting dager"
+      },
+      "uiComponent": null,
+      "getable": true,
+      "setable": false,
+      "insights": false
     },
     "pickup_next_fractions": {
       "type": "string",

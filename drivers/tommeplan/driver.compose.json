@@ -12,8 +12,10 @@
     "pickup_general",
     "pickup_hazardous",
     "pickup_garden",
+    "pickup_next",
     "pickup_next_fractions",
-    "pickup_next"
+    "pickup_next_date",
+    "pickup_next_days"
   ],
   "platforms": [
     "local"

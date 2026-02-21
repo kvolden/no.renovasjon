@@ -12,8 +12,24 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     this.adapter = this.driver.getAdapter(this.getStoreValue('provider'));
     // Update data if the device exists. If not it will be updated in onAdded() after setup.
     if (this.getStoreValue("deviceAdded")) {
+      await this.ensureCapabilities();
       await this.updateData();
       await this.updateCapabilities();
+    }
+  }
+
+  // Ensures that capabilities that may have been added after the device was first created are
+  // added to the device.
+  async ensureCapabilities() {
+    const capabilitiesToMigrate = [
+      'pickup_next_date',
+      'pickup_next_days',
+    ];
+
+    for (const capability of capabilitiesToMigrate) {
+      if (!this.hasCapability(capability)) {
+        await this.addCapability(capability);
+      }
     }
   }
 
@@ -109,12 +125,26 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     await this.ensurePickupNextIsLast(settings);
   }
 
+  diffInCalendarDays(dateFuture, datePast) {
+    const utcFuture = Date.UTC(
+      dateFuture.getFullYear(),
+      dateFuture.getMonth(),
+      dateFuture.getDate()
+    );
+
+    const utcPast = Date.UTC(
+      datePast.getFullYear(),
+      datePast.getMonth(),
+      datePast.getDate()
+    );
+
+    return Math.floor((utcFuture - utcPast) / 86400000);
+  }
+
   formatDate(date, relative = false) {
     if (!date) return null;
     if (relative) {
-      const today = new Date();
-      today.setHours(0,0,0,0);
-      const diffDays = parseInt((date - today) / (1000 * 60 * 60 * 24));
+      const diffDays = this.diffInCalendarDays(date, new Date());
       const dayOrDays = (diffDays == 1) ? this.homey.__('grammar.day') : this.homey.__('grammar.days');
       return `${diffDays} ${dayOrDays}`;
     }
@@ -152,6 +182,12 @@ module.exports = class RenovasjonDevice extends Homey.Device {
     if (cap == "pickup_next_fractions") {
       const translatedNextFractions = this.nextPickup.fractions.map(key => this.homey.__(`fractions.${key}.medium`));
       await this.setCapabilityValue(cap, translatedNextFractions.join(', '));
+    }
+    else if (cap == "pickup_next_date") {
+      await this.setCapabilityValue(cap, this.formatDate(this.nextPickup.date, false));
+    }
+    else if (cap == "pickup_next_days") {
+      await this.setCapabilityValue(cap, this.diffInCalendarDays(this.nextPickup.date, new Date()));
     }
     else if (cap == "pickup_next") {
       const relativeTime = settings.relative_time == "true" || settings.relative_time == "only_next";
