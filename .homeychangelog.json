@@ -34,5 +34,8 @@
   },
   "1.2.0": {
     "en": "Added widget; added support for providers SOR, LAS, Karmøy; fixed Avfall Sør and IRIS; stability improvements."
+  },
+  "1.3.0": {
+    "en": "Added action card to tokenize collected fractions; added hidden capabilities for formatted date and number of days until next pickup; reduced logging."
   }
 }
