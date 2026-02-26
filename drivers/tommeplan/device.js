@@ -107,6 +107,7 @@ module.exports = class RenovasjonDevice extends Homey.Device {
   }
 
   diffInCalendarDays(dateFuture, datePast) {
+    if (!dateFuture || !datePast) return null;
     const utcFuture = Date.UTC(
       dateFuture.getFullYear(),
       dateFuture.getMonth(),
