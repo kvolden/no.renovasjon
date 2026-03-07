@@ -2,34 +2,36 @@
 
 const Homey = require('homey');
 
-const RemidtAdapter = require('../../lib/adapters/remidt');
-const TRVAdapter = require('../../lib/adapters/trv');
-const GLORAdapter = require('../../lib/adapters/glor');
-const IRAdapter = require('../../lib/adapters/ir');
-const MinRenovasjonAdapter = require('../../lib/adapters/minrenovasjon');
-const FosenRenovasjonAdapter = require('../../lib/adapters/fosenrenovasjon');
-const HRAAdapter = require('../../lib/adapters/hra');
-const OsloKommuneAdapter = require('../../lib/adapters/oslokommune');
-const FredrikstadKommuneAdapter = require('../../lib/adapters/fredrikstadkommune');
-const VKRAdapter = require('../../lib/adapters/vkr');
-const SIMAdapter = require('../../lib/adapters/sim');
-const NGIRAdapter = require('../../lib/adapters/ngir');
-const BIRAdapter = require('../../lib/adapters/bir');
-const HIMAdapter = require('../../lib/adapters/him');
-const HRAdapter = require('../../lib/adapters/hr');
-const IRISAdapter = require('../../lib/adapters/iris');
-const IVARAdapter = require('../../lib/adapters/ivar');
-const NOMILAdapter = require('../../lib/adapters/nomil');
-const SHMILAdapter = require('../../lib/adapters/shmil');
-const UtsiraAdapter = require('../../lib/adapters/utsira');
-const AvfallSorAdapter = require('../../lib/adapters/avfallsor');
-const SandnesKommuneAdapter = require('../../lib/adapters/sandneskommune');
-const StavangerKommuneAdapter = require('../../lib/adapters/stavangerkommune');
-const TimeKommuneAdapter = require('../../lib/adapters/timekommune');
-const SUMAdapter = require('../../lib/adapters/sum');
-const SORAdapter = require('../../lib/adapters/sor');
-const LASAdapter = require('../../lib/adapters/las');
-const KarmoyKommuneAdapter = require('../../lib/adapters/karmoykommune');
+const ADAPTER_FACTORIES = {
+  remidt: () => new (require('../../lib/adapters/remidt'))(),
+  trv: () => new (require('../../lib/adapters/trv'))(),
+  glor: () => new (require('../../lib/adapters/glor'))(),
+  ir: () => new (require('../../lib/adapters/ir'))(),
+  minrenovasjon: () => new (require('../../lib/adapters/minrenovasjon'))(),
+  fosenrenovasjon: () => new (require('../../lib/adapters/fosenrenovasjon'))(),
+  hra: () => new (require('../../lib/adapters/hra'))(),
+  oslokommune: () => new (require('../../lib/adapters/oslokommune'))(),
+  fredrikstadkommune: () => new (require('../../lib/adapters/fredrikstadkommune'))(),
+  vkr: () => new (require('../../lib/adapters/vkr'))(),
+  sim: () => new (require('../../lib/adapters/sim'))(),
+  ngir: () => new (require('../../lib/adapters/ngir'))(),
+  bir: () => new (require('../../lib/adapters/bir'))(),
+  him: () => new (require('../../lib/adapters/him'))(),
+  hr: () => new (require('../../lib/adapters/hr'))(),
+  iris: () => new (require('../../lib/adapters/iris'))(),
+  ivar: () => new (require('../../lib/adapters/ivar'))(),
+  nomil: () => new (require('../../lib/adapters/nomil'))(),
+  shmil: () => new (require('../../lib/adapters/shmil'))(),
+  utsira: () => new (require('../../lib/adapters/utsira'))(),
+  avfallsor: () => new (require('../../lib/adapters/avfallsor'))(),
+  sandneskommune: () => new (require('../../lib/adapters/sandneskommune'))(),
+  stavangerkommune: () => new (require('../../lib/adapters/stavangerkommune'))(),
+  timekommune: () => new (require('../../lib/adapters/timekommune'))(),
+  sum: () => new (require('../../lib/adapters/sum'))(),
+  sor: () => new (require('../../lib/adapters/sor'))(),
+  las: () => new (require('../../lib/adapters/las'))(),
+  karmoykommune: () => new (require('../../lib/adapters/karmoykommune'))(),
+};
 
 module.exports = class RenovasjonDriver extends Homey.Driver {
 
@@ -53,36 +55,8 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
    * onInit is called when the driver is initialized.
    */
   async onInit() {
-    this.adapters = {
-      "remidt": new RemidtAdapter(),
-      "trv": new TRVAdapter(),
-      "glor": new GLORAdapter(),
-      "ir": new IRAdapter(),
-      "minrenovasjon": new MinRenovasjonAdapter(),
-      "fosenrenovasjon": new FosenRenovasjonAdapter(),
-      "hra": new HRAAdapter(),
-      "oslokommune": new OsloKommuneAdapter(),
-      "fredrikstadkommune": new FredrikstadKommuneAdapter(),
-      "vkr": new VKRAdapter(),
-      "sim": new SIMAdapter(),
-      "ngir": new NGIRAdapter(),
-      "bir": new BIRAdapter(),
-      "him": new HIMAdapter(),
-      "hr": new HRAdapter(),
-      "iris": new IRISAdapter(),
-      "ivar": new IVARAdapter(),
-      "nomil": new NOMILAdapter(),
-      "shmil": new SHMILAdapter(),
-      "utsira": new UtsiraAdapter(),
-      "avfallsor": new AvfallSorAdapter(),
-      "sandneskommune": new SandnesKommuneAdapter(),
-      "stavangerkommune": new StavangerKommuneAdapter(),
-      "timekommune": new TimeKommuneAdapter(),
-      "sum": new SUMAdapter(),
-      "sor": new SORAdapter(),
-      "las": new LASAdapter(),
-      "karmoykommune": new KarmoyKommuneAdapter(),
-    };
+    this.adapterFactories = ADAPTER_FACTORIES;
+    this.adapters = {};
 
     this.scheduleMidnightUpdate();
 
@@ -217,18 +191,34 @@ module.exports = class RenovasjonDriver extends Homey.Driver {
 
   // Return a list of available adapters with id and label for pairing UI
   getAdaptersList() {
-    return Object.entries(this.adapters).map(([id, adapter]) => ({
+    return Object.keys(this.adapterFactories).map((id) => {
+      const adapter = this.getAdapter(id);
+      return {
       id,
       label: adapter.getName() || id,
-    }));
+      };
+    });
   }
 
   getAdapter(provider) {
+    if (!provider) {
+      return null;
+    }
+
+    if (!this.adapters[provider]) {
+      const factory = this.adapterFactories[provider];
+      if (!factory) {
+        return null;
+      }
+      this.adapters[provider] = factory();
+    }
+
     return this.adapters[provider];
   }
 
   async getProviderForMunicipality(municipalityCode) {
-    for (const [id, adapter] of Object.entries(this.adapters)) {
+    for (const id of Object.keys(this.adapterFactories)) {
+      const adapter = this.getAdapter(id);
       try{
         if (await adapter.coversMunicipality(municipalityCode)) {
           return id;

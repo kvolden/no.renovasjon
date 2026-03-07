@@ -2,6 +2,21 @@
 
 const Homey = require('homey');
 
+const CAPABILITIES_TO_MIGRATE = [
+  'pickup_next_date',
+  'pickup_next_days',
+];
+
+const FRACTION_CAPABILITY_SETTING_MAP = {
+  pickup_glass: 'show_fraction_glass',
+  pickup_food: 'show_fraction_food',
+  pickup_paper: 'show_fraction_paper',
+  pickup_plastic: 'show_fraction_plastic',
+  pickup_general: 'show_fraction_general',
+  pickup_hazardous: 'show_fraction_hazardous',
+  pickup_garden: 'show_fraction_garden'
+};
+
 module.exports = class RenovasjonDevice extends Homey.Device {
 
   /**
@@ -20,12 +35,7 @@ module.exports = class RenovasjonDevice extends Homey.Device {
   // Ensures that capabilities that may have been added after the device was first created are
   // added to the device.
   async ensureCapabilities() {
-    const capabilitiesToMigrate = [
-      'pickup_next_date',
-      'pickup_next_days',
-    ];
-
-    for (const capability of capabilitiesToMigrate) {
+    for (const capability of CAPABILITIES_TO_MIGRATE) {
       if (!this.hasCapability(capability)) {
         await this.addCapability(capability);
       }
@@ -85,17 +95,7 @@ module.exports = class RenovasjonDevice extends Homey.Device {
   }
 
   async showAndHideCapabilities(settings = this.getSettings()) {
-    const map = {
-      pickup_glass: 'show_fraction_glass',
-      pickup_food: 'show_fraction_food',
-      pickup_paper: 'show_fraction_paper',
-      pickup_plastic: 'show_fraction_plastic',
-      pickup_general: 'show_fraction_general',
-      pickup_hazardous: 'show_fraction_hazardous',
-      pickup_garden: 'show_fraction_garden'
-    };
-
-    for (const [cap, settingKey] of Object.entries(map)) {
+    for (const [cap, settingKey] of Object.entries(FRACTION_CAPABILITY_SETTING_MAP)) {
       const enabled = settings[settingKey];
       if (enabled && !this.hasCapability(cap)) {
         await this.addCapability(cap);
@@ -141,22 +141,30 @@ module.exports = class RenovasjonDevice extends Homey.Device {
   }
 
   getNextPickup(fractions) {
-    // Filter out null values
-    const entries = Object.entries(fractions).filter(([, date]) => date);
-    if (entries.length === 0) {
+    let minDate = null;
+    let nearestFractions = [];
+
+    for (const [fraction, date] of Object.entries(fractions)) {
+      if (!date) {
+        continue;
+      }
+
+      if (!minDate || date < minDate) {
+        minDate = date;
+        nearestFractions = [fraction];
+      }
+      else if (date.getTime() === minDate.getTime()) {
+        nearestFractions.push(fraction);
+      }
+    }
+
+    if (!minDate) {
       return { date: null, fractions: [] };
     }
-    // Earliest date
-    const minDate = new Date(Math.min(...entries.map(([, date]) => date)));
-
-    // Fractions with the earliest date
-    const nearest = entries.filter(
-      ([, date]) => date.getTime() === minDate.getTime()
-    );
 
     return {
       date: minDate,
-      fractions: nearest.map(([key]) => key),
+      fractions: nearestFractions,
     };
   }
 
@@ -206,6 +214,11 @@ module.exports = class RenovasjonDevice extends Homey.Device {
   }
 
   async update(isRetry = false) {
+    if (this._retryTimer) {
+      clearTimeout(this._retryTimer);
+      this._retryTimer = null;
+    }
+
     try {
       await this.updateData();
     }
@@ -217,11 +230,23 @@ module.exports = class RenovasjonDevice extends Homey.Device {
       }
       else {
         this.error('Error updating data on retry, scheduling retry in 5 minutes:', error.message);
-        setTimeout(() => this.update(true), 5 * 60 * 1000);
+        this._retryTimer = setTimeout(() => {
+          this._retryTimer = null;
+          this.update(true).catch((updateError) => {
+            this.error('Retry update failed:', updateError.message);
+          });
+        }, 5 * 60 * 1000);
         return;
       }
     }
     await this.updateCapabilities();
+  }
+
+  async onUninit() {
+    if (this._retryTimer) {
+      clearTimeout(this._retryTimer);
+      this._retryTimer = null;
+    }
   }
 
 };
