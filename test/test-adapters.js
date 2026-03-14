@@ -150,7 +150,16 @@ async function testMunicipality(adapter, muni) {
     return false;
   }
   const hasDate = fetchedDates && Object.values(fetchedDates).some(f => f && f instanceof Date);
-  return hasDate;
+  if (!hasDate) {
+    console.log(`  Failed to get valid fraction dates for address in ${muni}, test fails.`);
+    return false;
+  }
+  const hasDateInFuture = Object.values(fetchedDates).some(f => f && f > new Date());
+  if (!hasDateInFuture) {
+    console.log(`  No future fraction dates for address in ${muni}, test fails.`);
+    return false;
+  }
+  return true;
 }
 
 // Test the interfacing from the driver
