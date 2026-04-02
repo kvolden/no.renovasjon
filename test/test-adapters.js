@@ -7,10 +7,14 @@ const { adapters } = require('./adapters-config');
 
 // --- Parse command line arguments ---
 let updateMode = false;
+let fullMode = false;
 let adapterFilter = null;
 
 const options = {
   'update-addresses': {
+    type: 'boolean',
+  },
+  'full': {
     type: 'boolean',
   },
   'adapters': {
@@ -26,11 +30,12 @@ try {
   });
 
   updateMode = !!values['update-addresses'];
+  fullMode = !!values['full'];
   adapterFilter = values.adapters ? values.adapters.split(',') : null;
 }
 catch (e) {
   console.error(`Error: ${e.message}`);
-  console.log("Allowed flags: --update-addresses, --adapters <value1,adapter2,...>");
+  console.log("Allowed flags: --update-addresses, --full, --adapters <adapter1,adapter2,...>");
   process.exit(1);
 }
 
@@ -213,7 +218,7 @@ async function runTest(adapter) {
     if (!interfaceOk) {
       return false;
     }
-    if (adapter.testAllMunicipalities) {
+    if (adapter.testAllMunicipalities && fullMode) {
       let success = true;
       for (const muni of supportedMunicipalities) {
         const ok = await testMunicipality(adapter, muni);
