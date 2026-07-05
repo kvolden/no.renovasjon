@@ -143,9 +143,13 @@ module.exports = class RenovasjonDevice extends Homey.Device {
   getNextPickup(fractions) {
     let minDate = null;
     let nearestFractions = [];
+    const today = new Date();
 
     for (const [fraction, date] of Object.entries(fractions)) {
       if (!date) {
+        continue;
+      }
+      if (this.diffInCalendarDays(date, today) < 0) {
         continue;
       }
 
